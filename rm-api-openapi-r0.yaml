@@ -1,0 +1,282 @@
+openapi: 3.0.3
+info:
+  title: Customer Information
+  description: |-
+ 
+  version: 0.1 (Draft)
+servers:
+  - url: https://uat.bctmaxar.com//api/v2
+tags:
+  - name: Customer
+    description: Customer Information
+  - name: Case
+    description: Case Information
+paths:
+  /customer/{ani}:
+    get:
+      tags:
+        - Customer
+      summary: Find Customer Information by ANI 
+      description: ""
+      operationId: "getCustomerByAni"
+      parameters:
+        - in: path
+          name: ani
+          schema:
+            type: string
+          required: true
+          description: ANI (Caller Number) from Telephony System
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'          
+      security:
+        - api_key: []
+
+  /case/{customerID}:
+    get:
+      tags:
+        - Case
+      summary: Get Case History by Cusomer ID
+      description: ""
+      operationId: "getCasebyCustomerID"
+      parameters:
+        - in: path
+          name: customerID
+          schema:
+            type: string
+          required: true
+          description: ANI (Caller Number) from Telephony System
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Case'          
+      security:
+        - api_key: []   
+  /case:
+    post:
+      tags:
+        - Case
+      summary: Create new Case
+      requestBody:
+        description: .
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseCreate'
+      responses:
+        200:
+          description: .
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 100000
+        customerId:
+          type: string
+          example: 37745469-0034-4ddf-b277-c9e2cf2dfa
+        firstName:
+          type: string
+          example: เอกชัย
+        lastName:
+          type: string
+          example: รุ่งโรจน์ 
+        email***:
+          type: string
+          example: akechai@domain.com 
+        phone***: 
+          type: string
+          example: '0819998888'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'          
+        createBy:
+          type: string
+          example: admin
+        createAt:
+          type: string
+          example: '2023-09-16T03:29:55.133Z'
+        updateBy:
+          type: string
+          example: admin
+        updateAt:
+          type: string
+          example: '2023-09-16T03:29:55.133Z'
+    Address:
+      type: object
+      properties:
+        addressType:
+          type: string
+          example: B
+        name:
+          type: string
+          example: '99/99 ซอย 15 ถนนรามอินทรา  ตึก/หมู่บ้านบางกอกบูเลอวาร์ด รามอินทรา-วัชรพล ออเงิน สายไหม กรุงเทพมหานคร  1020'
+        houseNo:
+          type: string
+          example: "99/99"
+        village:
+          type: string
+          example: 'บางกอกบูเลอวาร์ด รามอินทรา-วัชรพล'
+        lane:
+          type: string
+          example: '15'
+        street:
+          type: string
+          example: 'รามอินทรา'
+        province:
+          type: string
+          example: 'รามอินทรา'  
+        district:
+          type: string
+          example: 'ออเงิน'  
+        amphoe:
+          type: string
+          example: 'สายไหม'  
+        zipcode:
+          type: string
+          example: '10220'    
+        product:
+          $ref: '#/components/schemas/Product'
+    Product:
+      type: object
+      properties:
+        dealerCode:
+          type: string
+          example: D0035
+        dealer:
+          type: string
+          example: The Mall
+        installationDate:
+          type: string
+          example: 2023-01-18T02:30:00.133Z
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductLocation'
+    ProductLocation:
+      type: object
+      properties:
+        name:
+          type: string
+          example: ห้องรับแขก
+        indoorModel:
+          type: string
+          example: 38TVAB028-W-I
+        indoorSerialNo:
+          type: string
+          example: 99800344
+        outdoorModel:
+          type: string
+          example: 42TVAB028-W-I
+        outdoorSerialNo:
+          type: string
+          example: 32800366
+    Case:
+      type: object
+      properties:
+        refNo:
+          type: string
+          example: M6712830
+        id:
+          type: string
+          example: c48553a6-b282-4be4-b326-5b3ee000611c
+        caseType:
+          type: string
+          example: "แจ้งซ่อม | อื่นๆ | สินค้าในรับประกัน"
+        location:
+          type: string
+          example: ห้องรับแขก
+        sn:
+          type: string
+          example: "Indoor:  / Outdoor: 32800366"
+        model:
+          type: string
+          example: "Indoor:  / Outdoor: 42TVAB028-W-I"
+        title:
+          type: string
+          example: "แจ้งซ่อม | อื่นๆ | สินค้าในรับประกัน"
+        caseDescription:
+          type: string
+          example:  "ส่งงานแล้ว \r\nชื่อผู้แจ้ง: mike\r\nเบอร์ติดต่อผู้แจ้ง: 08998316xx"
+        lastActivityDescription":
+          type: string
+          example: "ห้องรับแขก (Indoor :-/-) , (Outdoor :42TVAB028-W-I/32800366)"
+        lastActivityBy:
+          type: string
+          example: System
+        caseCreateDate:
+          type: string
+          example: 2024-05-15T04:56:48.027Z
+        createBy:
+          type: string
+          example: System
+        caseUpdateDate:
+          type: string
+          example: 2024-05-15T04:56:48.027Z
+        updateBy:
+          type: string
+          example: System  
+    CaseCreate:
+      type: object
+      properties:
+        customerId:
+          type: string
+          example: 37745469-0034-4ddf-b277-c9e2cf2dfa
+        caseTypeId:
+          type: string
+          example: 999
+          description: This field will be Define as EnumType
+        channelCode:
+          type: string
+          example: WEB
+        interactionDirection:
+          type: "string"
+          example: "IN"
+        description:
+          type: string
+          example: "สาเหตุ/ อาการชำรุด"
+        activityDescriptionPublic:
+          type: string
+          example: 
+          
+      required:
+        - customerId
+        - caseTypeId
+        - channelCode
+        - interactionDirection
+        - description
+        - activityDescriptionPublic
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
